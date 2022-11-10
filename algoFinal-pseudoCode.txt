@@ -1,0 +1,27 @@
+# DEBUT
+
+# On définit une liste tableElements à laquelle on assigne 3 valeurs : "Pierre", "Feuille" et "Ciseau"
+# On définit un dictionnaire cercleCombat auquel on assigne 3 couples clé/valeur : "Pierre" : "Ciseau", "Feuille" : "Pierre" et "Ciseau" : "Feuille"
+
+# On admet une fonction random qui donne au hasard un nombre entre 0 et 2
+# On admet une fonction input qui récupère l'entrée d'un joueur à chaque fois qu'on l'exécute
+
+# On définit une fonction pierreFeuilleCiseau qui ne prend pas de paramètre :
+    # On définit une variable choixJoueur à laquelle on assigne la valeur de tableElements ayant pour index le résultat d'un input entre 0 et 2
+    # On définit une variable choixAdversaire à laquelle on assigne la valeur de tableElements ayant pour index le résultat de la fonction random
+    # Si choixJoueur et choixAdversaire sont égaux :
+        #Alors
+        # On attend 2 secondes 
+        # On retourne "Égalité !"
+    # Sinon :
+        #Alors
+        # Si choixJoueur est la clé dans cercleCombat et que choixAdversaire en est la valeur associée :
+            #Alors
+            # On attend 2 secondes
+            # On retourne "Gagné !"
+        # Sinon :
+            #Alors
+            # On attend 2 secondes
+            # On retourne "Perdu !"
+
+# FIN
