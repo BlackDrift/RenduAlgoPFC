@@ -50,7 +50,7 @@ class TicTacToe (object):  #création de la class TicTacToe de type object
         assert colCoord >= 0 and colCoord <=2, "You're supposed to have chosen a number between 1 and 3..."
         return (rowCoord, colCoord) #retoune la ligne et la colonne du point
 
-    """def botTurn(self) :   #Les actions à faire du bot
+    #"""def botTurn(self) :   #Les actions à faire du bot
         botRowCoord=random.randint(0,2)   #le robot choisi une coordonnée horizontale aléatoire
         botColCoord=random.randint(0,2)   #le robot choisi une coordonnée verticale aléatoire
         return (botRowCoord, botColCoord) #retourne la ligne et la colonne du point"""
@@ -216,57 +216,124 @@ class ExtremeIA(object) :
         self.game = game
         self.gameTab = game.gamePlate
         self.turnOne = True
+        
     
-    def lineCheck(self):
+    def rowCheck(self):
         length = len(self.gameTab)
         player = "X"
         count = 0
         for i in range(length):
             for j in range(length):
-                if self.gameTab[i][j] != player:
+                if self.gameTab[i][j] == player:
                     count = count + 1   
-                if count ==2:
-                    
+                if count ==2 and "*" in self.gameTab[i]:
+                    emptyPlace = self.gameTab[i].index("*")
+                    return (i,emptyPlace)
+            count = 0
+        return None
+
+    def colCheck(self):
+        length = len(self.gameTab)
+        player = "X"
+        count = 0
+        for i in range(length):
+            column = []
+            for _ in range (length) :
+                column.append(self.gameTab[i][length - 1])
+            for j in range(length) :
+                if self.gameTab[j][i] == player :
+                    count = count + 1
+                if count ==2 and "*" in self.gameTab[j]:
+                    emptyPlace = column.index("*")
+                    return (emptyPlace,i)
+            count = 0
+        return None
+
+    def diagonalCheck(self):
+        length = len(self.gameTab)
+        player = "X"
+        firstDiagonal = []
+        secondDiagonal = []
+        count = 0
+        for x in range(length):
+            firstDiagonal.append(((self.gameTab[x][x],(x,x))))
+            secondDiagonal.append(((self.gameTab[x][length - 1 - x]),(x,length-1-x)))
+        
+        for i in range(length):
+            if self.gameTab[i][i] == player :
+                count = count + 1
+            if count == 2 and "*" in firstDiagonal:
+                emptyPlace = firstDiagonal[i].index("*")
+                return (i, emptyPlace)
+        count = 0
+        for j in range(length):
+            if self.gameTab[j][length - 1 - j]:
+                count = count + 1
+            if count==2 and "*" in secondDiagonal:
+                emptyPlace = secondDiagonal[j].index("*")
+                return (j,emptyPlace)
+        count = 0
+        return None
 
     def botTurn(self)->tuple:
         coordsPlayed = self.game.takenCoords
         temp = None
-        for i in range(len(coordsPlayed)):
-            if coordsPlayed[i] not in self.AICoords or coordsPlayed[i] not in self.PlayerCoords:
-                self.PlayerCoords.append(coordsPlayed[i])
-                temp=coordsPlayed[i]
+        self.PlayerCoords.append(coordsPlayed[-1])   
         while self.turnOne :
-            if temp == (0,0) or temp == (0,2) or temp == (2,0) or temp == (2,2):
-                self.AICoords.append((1,1))
-                self.turnOne=False
-                return self.AICoords[-1]
-            elif temp[0]==0:
-                self.AICoords.append(temp[0]+2,temp[1])
-                self.turnOne=False
-                return self.AICoords[-1]
-            elif temp[0]==2:
-                self.AICoords.append(temp[0]-2,temp[1])
-                self.turnOne=False
-                return self.AICoords[-1]
-            elif temp[1]==0:
-                self.AICoords.append(temp[0],temp[1]+2)
-                self.turnOne=False
-                return self.AICoords[-1]
-            elif temp[1]==2:
-                self.AICoords.append(temp[0],temp[1]-2)
-                self.turnOne=False
-                return self.AICoords[-1]
-            elif temp == (1,1) :
-                x = random.randrange(0,2,2)
-                self.AICoords.append((x,x))
-                self.turnOne=False
-                return self.AICoords[-1]
-
+            for i in range(len(coordsPlayed)):
+                if coordsPlayed[i] not in self.AICoords or coordsPlayed[i] not in self.PlayerCoords:
+                    self.PlayerCoords.append(coordsPlayed[i])
+                    temp=coordsPlayed[i]
+                if temp == (0,0) or temp == (0,2) or temp == (2,0) or temp == (2,2):
+                    self.AICoords.append((1,1))
+                    self.turnOne=False
+                    return self.AICoords[-1]
+                elif temp[0]==0:
+                    self.AICoords.append((temp[0]+2,temp[1]))
+                    self.turnOne=False
+                    return self.AICoords[-1]
+                elif temp[0]==2:
+                    self.AICoords.append((temp[0]-2,temp[1]))
+                    self.turnOne=False               
+                    return self.AICoords[-1]
+                elif temp[1]==0:
+                    self.AICoords.append((temp[0],temp[1]+2))
+                    self.turnOne=False               
+                    return self.AICoords[-1]
+                elif temp[1]==2:
+                    self.AICoords.append((temp[0],temp[1]-2))
+                    self.turnOne=False               
+                    return self.AICoords[-1]
+                elif temp == (1,1) :
+                    x = random.randrange(0,2,2)
+                    y = random.randrange(0,2,2)
+                    self.AICoords.append(((x,y)))
+                    self.turnOne=False
+                    return self.AICoords[-1]
+        temp = []
+        if self.rowCheck() != None :
+            temp.append(self.rowCheck())
+        elif self.colCheck() != None and self.colCheck() not in temp :     
+            temp.append(self.colCheck())
+        elif self.diagonalCheck() != None and self.diagonalCheck() not in temp :
+            temp.append(self.diagonalCheck())
+        if len(temp) > 1 :
+            x = random.randint(0,len(temp))
+            self.AICoords.append(temp[x])
+        elif len(temp) == 1 :
+            self.AICoords += temp   
+        elif temp == [] and not self.game.filledGamePlate() :
+            AICoords = (random.randint(0,2),random.randint(0,2))
+            while self.gameTab[AICoords[0]][AICoords[1]] != "*" :
+                AICoords = (random.randint(0,2),random.randint(0,2))
+            self.AICoords.append(AICoords)
+        elif self.game.filledGamePlate() :
+            breakpoint
+        return self.AICoords[-1]
         
+            
 
                
-
-
 
 game=TicTacToe()
 game.ticTacToeStart()
