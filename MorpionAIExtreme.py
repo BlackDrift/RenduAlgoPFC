@@ -199,10 +199,7 @@ class TicTacToe (object):  #création de la class TicTacToe de type object
                     self.win(self._pointOwner)
                     break
                 
-                if self.filledGamePlate() :                                  
-                    continuing = False
-                    self.draw()
-                    break
+                                                                             
 
                 self._pointOwner = self.swapTurn(self._pointOwner)
                 
