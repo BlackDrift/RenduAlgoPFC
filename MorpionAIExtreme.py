@@ -134,7 +134,7 @@ class TicTacToe (object):  #création de la class TicTacToe de type object
                 self._pointOwner = self.swapTurn(self._pointOwner)
 
                 self._botCoords=self.AIExtreme.botTurn()
-                while self.gamePlate[self._botCoords[0]][self._botCoords[1]] != "*" :
+                while self.gamePlate[self._botCoords[0]][self._botCoords[1]] != "*" and not self.filledGamePlate():
                     self._botCoords=self.AIExtreme.botTurn()
                 self.takenCoords.append(self._botCoords)
                 
@@ -150,7 +150,6 @@ class TicTacToe (object):  #création de la class TicTacToe de type object
                     break
                 self._pointOwner = self.swapTurn(self._pointOwner)
                 
-                assert len(self.takenCoords) <= 9, "An internal error occured..."
                 if self.filledGamePlate() :                                  
                     continuing = False
                     self.draw()
@@ -215,7 +214,7 @@ class ExtremeIA(object) :
         self.turnOne = True
         
     
-    def rowCheck(self):
+    def rowCheck(self):  #On définit la méthodes rowCheck qui vérifieras
         length = len(self.gameTab)
         player = "X"
         count = 0
@@ -229,47 +228,47 @@ class ExtremeIA(object) :
             count = 0
         return None
 
-    def colCheck(self):
+    def colCheck(self):   #On définit la méthode colCheck qui vérifieras les colonnes
         length = len(self.gameTab)
         player = "X"
         count = 0
         for i in range(length):
             column = []
-            for _ in range (length) :
-                column.append(self.gameTab[i][length - 1])
+            for x in range (length) :
+                column.append(self.gameTab[x][i])
             for j in range(length) :
-                if self.gameTab[j][i] == player :
+                if column[j] == player :
                     count = count + 1
-                if count ==2 and "*" in self.gameTab[j]:
+                if count ==2 and "*" in column:
                     emptyPlace = column.index("*")
                     return (emptyPlace,i)
             count = 0
         return None
 
-    def diagonalCheck(self):
+    def diagonalCheck(self):  #On définit la méthode diagonalCheck qui vérfieras les diagonales
         length = len(self.gameTab)
         player = "X"
         firstDiagonal = []
         secondDiagonal = []
-        count = 0
         for x in range(length):
-            firstDiagonal.append(((self.gameTab[x][x],(x,x))))
-            secondDiagonal.append(((self.gameTab[x][length - 1 - x]),(x,length-1-x)))
-        
-        for i in range(length):
-            if self.gameTab[i][i] == player :
+            firstDiagonal.append(((self.gameTab[x][x],(x,x))))   #première diagonale
+            secondDiagonal.append(((self.gameTab[x][length - 1 - x]),(x,length-1-x)))   #deuxième diagonale
+        count = 0
+        for i in range(length): 
+            if firstDiagonal[i][0] == player :
                 count = count + 1
-            if count == 2 and "*" in firstDiagonal:
-                emptyPlace = firstDiagonal[i].index("*")
-                return (i, emptyPlace)
+            if count == 2 :
+                for z in range(length) :
+                    if firstDiagonal[z][0] == "*" :
+                        return firstDiagonal[z][1]
         count = 0
         for j in range(length):
-            if self.gameTab[j][length - 1 - j]:
+            if secondDiagonal[j][0] == player :
                 count = count + 1
-            if count==2 and "*" in secondDiagonal:
-                emptyPlace = secondDiagonal[j].index("*")
-                return (j,emptyPlace)
-        count = 0
+            if count==2 :
+                for z in range (length):
+                    if secondDiagonal[z][0] == "*" :
+                        return secondDiagonal[z][1]
         return None
 
     def botTurn(self)->tuple:
@@ -308,11 +307,11 @@ class ExtremeIA(object) :
                     self.turnOne=False
                     return self.AICoords[-1]
         temp = []
-        if self.rowCheck() != None :
+        if self.rowCheck() != None and self.rowCheck() not in temp :
             temp.append(self.rowCheck())
-        elif self.colCheck() != None and self.colCheck() not in temp :     
+        if self.colCheck() != None and self.colCheck() not in temp :     
             temp.append(self.colCheck())
-        elif self.diagonalCheck() != None and self.diagonalCheck() not in temp :
+        if self.diagonalCheck() != None and self.diagonalCheck() not in temp :
             temp.append(self.diagonalCheck())
         if len(temp) > 1 :
             x = random.randint(0,len(temp))
@@ -321,11 +320,8 @@ class ExtremeIA(object) :
             self.AICoords += temp   
         elif temp == [] and not self.game.filledGamePlate() :
             AICoords = (random.randint(0,2),random.randint(0,2))
-            while self.gameTab[AICoords[0]][AICoords[1]] != "*" :
-                AICoords = (random.randint(0,2),random.randint(0,2))
             self.AICoords.append(AICoords)
-        elif self.game.filledGamePlate() :
-            breakpoint
+        #print(temp)
         return self.AICoords[-1]
         
             
