@@ -206,7 +206,6 @@ class TicTacToe (object):  #création de la class TicTacToe de type object
 class ExtremeIA(object) :
 
     def __init__(self,game:TicTacToe) :
-        self._AICoords = []
         self.AICoords = []
         self.PlayerCoords = []
         self.game = game
@@ -214,9 +213,8 @@ class ExtremeIA(object) :
         self.turnOne = True
         
     
-    def rowCheck(self):  #On définit la méthodes rowCheck qui vérifieras
+    def rowCheck(self,player):  #On définit la méthodes rowCheck qui vérifieras
         length = len(self.gameTab)
-        player = "X"
         count = 0
         for i in range(length):
             for j in range(length):
@@ -228,9 +226,8 @@ class ExtremeIA(object) :
             count = 0
         return None
 
-    def colCheck(self):   #On définit la méthode colCheck qui vérifieras les colonnes
+    def colCheck(self,player):   #On définit la méthode colCheck qui vérifieras les colonnes
         length = len(self.gameTab)
-        player = "X"
         count = 0
         for i in range(length):
             column = []
@@ -245,9 +242,8 @@ class ExtremeIA(object) :
             count = 0
         return None
 
-    def diagonalCheck(self):  #On définit la méthode diagonalCheck qui vérfieras les diagonales
+    def diagonalCheck(self,player):  #On définit la méthode diagonalCheck qui vérfieras les diagonales
         length = len(self.gameTab)
-        player = "X"
         firstDiagonal = []
         secondDiagonal = []
         for x in range(length):
@@ -303,24 +299,44 @@ class ExtremeIA(object) :
                 elif temp == (1,1) :
                     x = random.randrange(0,2,2)
                     y = random.randrange(0,2,2)
-                    self.AICoords.append(((x,y)))
+                    self.AICoords.append((x,y))
                     self.turnOne=False
                     return self.AICoords[-1]
         temp = []
-        if self.rowCheck() != None and self.rowCheck() not in temp :
-            temp.append(self.rowCheck())
-        if self.colCheck() != None and self.colCheck() not in temp :     
-            temp.append(self.colCheck())
-        if self.diagonalCheck() != None and self.diagonalCheck() not in temp :
-            temp.append(self.diagonalCheck())
-        if len(temp) > 1 :
-            x = random.randint(0,len(temp))
-            self.AICoords.append(temp[x])
-        elif len(temp) == 1 :
-            self.AICoords += temp   
-        elif temp == [] and not self.game.filledGamePlate() :
-            AICoords = (random.randint(0,2),random.randint(0,2))
-            self.AICoords.append(AICoords)
+        tempATK = []
+        if self.rowCheck("X") != None and self.rowCheck("X") not in temp :
+            temp.append(self.rowCheck("X"))
+        if self.colCheck("X") != None and self.colCheck("X") not in temp :     
+            temp.append(self.colCheck("X"))
+        if self.diagonalCheck("X") != None and self.diagonalCheck("X") not in temp :
+            temp.append(self.diagonalCheck("X"))
+        
+        if self.rowCheck("O") != None and self.rowCheck("O") not in tempATK :
+            tempATK.append(self.rowCheck("O"))
+        if self.colCheck("O") != None and self.colCheck("O") not in tempATK :     
+            tempATK.append(self.colCheck())
+        if self.diagonalCheck("O") != None and self.diagonalCheck("O") not in tempATK :
+            tempATK.append(self.diagonalCheck("O"))
+        
+        if len(tempATK) >= 1 :
+            if len(tempATK) > 1 :
+                x = random.randint(0,len(tempATK))
+                self.AICoords.append(tempATK[x])
+            elif len(tempATK) == 1 :
+                self.AICoords += tempATK   
+            elif tempATK == [] and not self.game.filledGamePlate() :
+                AICoords = (random.randint(0,2),random.randint(0,2))
+                self.AICoords.append(AICoords)
+        else :
+            if len(temp) > 1 :
+                x = random.randint(0,len(temp))
+                self.AICoords.append(temp[x])
+            elif len(temp) == 1 :
+                self.AICoords += temp   
+            elif temp == [] and not self.game.filledGamePlate() :
+                AICoords = (random.randint(0,2),random.randint(0,2))
+                self.AICoords.append(AICoords)
+        
         #print(temp)
         return self.AICoords[-1]
         
@@ -334,4 +350,3 @@ game.ticTacToeGame()
 
 
 
-#print("AI played ",(self._botCoords[0]+1,self._botCoords[1]+1))
