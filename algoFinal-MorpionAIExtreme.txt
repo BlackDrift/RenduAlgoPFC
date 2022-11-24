@@ -1,6 +1,5 @@
 #DEBUT
 #On importe la bibiliothèque random
-#On importe la bibiliothèque random
 #On crée la classe objet TicTacToe   
     
     #On définit une surcharge de la méthode constructeur __init__ avec comme paramètre un booléen secondPlayer qui atteste de la présence (ou non) d'un deuxième joueur 
@@ -240,9 +239,175 @@
                     #on arrête la boucle
 
                 #On redéfinit pointOwner en appelant swapTurn avec comme paramètres pointOwner
+                
+#On crée la classe object ExtremeIA 
+    
+    #On définit une surcharge de la méthode constructeur __init__ avec comme paramètre game un objet de classe TicTacToe (une partie de morpion)
+        #Initialisation de l'attribut tableau AICoords (vide)
+        #Initialisation de l'attribut tableau PlayerCoords (vide)
+        #initialisation de l'attribut game égal au paramètre game (la partie de morpion)
+        #Initialisation de l'attribut gameTab égal au gamePlate de game (le tableau de jeu de la partie)
+        #Initialisation de l'attribut turnOne égal à True (le tour un de la partie)
 
-#on définit une variable morpion égale à un objet TicTacToe avec True en paramètre (une partie de joueur contre joueur)
-#on applique la méthode ticTacToeStart à morpion (pour initialiser le tableau de jeu)
-#on applique la méthode ticTacToeGame à morpion (pour démarrer la partie)
+    #On définit la méthode rowCheck qui prend en paramètre le joueur dont on veut vérifier la potentielle victoire (s'il est sur le point de compléter une ligne)
+        #On définit length égal à la longueur de gameTab
+        #On définit count un compteur égal à 0
+        #pour i allant de 0 à length - 1 :
+            #pour j allant de 0 à length - 1 :
+                #si le point de coordonnées (i,j) dans le gameTab est égal à player :
+                    #alors
+                    #On ajoute 1 à count
+                #si count est égal à 2 et que le caractère "*" est présent dans la ligne du tableau :
+                    #alors
+                    #On définit emptyPlace comme étant l'index dans le gameTab de la valeur "*"
+                    #On renvoie i et emptyPlace sous forme de tuple
+            #On remet count à 0
+        #On renoie du vide (None)
+
+    #On définit la méthode colCheck qui prend en paramètre le joueur dont on veut vérifier la potentielle victoire (s'il est sur le point de compléter une colonne)
+        #On définit length égal à la longueur du gameTab
+        #On définit count égal à 0
+        #pour i allant de 0 à length - 1 :
+            #Initialisation de la liste column vide
+            #pour x allant de 0 à length - 1:
+                #On ajoute à la fin de la liste column la valeur dans gameTab de coordonnées (x,i) 
+            #pour j allant de 0 length - 1:
+                #si la valeur d'index j dans column est égal à player:
+                    #alors
+                    #On ajoute 1 à count
+                #si count est égal à 2 et que le caractère "*" est présent dans la ligne du tableau :
+                    #alors
+                    #On définit emptyPlace comme étant l'index "*" dans column
+                    #On renvoie emptyplace et i sous forme de tuple
+        #On renvoie du vide (None)
+    
+    #On définit une méthode diagonalCheck qui prend en paramètre le joueur dont on veut vérifier la potentielle victoire (s'il est sur le point de compléter une diagonale)
+        #On définit length égal à la longueur du gameTab
+        #On définit firstDiagonal un tableau vide
+        #On définit secondDiagonal un deuxième tableau vide
+        #pour x allant de 0 à length - 1 :
+            #On ajoute à la fin de firstDiagonal la valeur de coordonnées (x,x) dans gameTab ainsi que le tuple de ces coordonnées 
+            #On ajoute à la fin de secondDiagonal la valeur de coordonnées (x,length - 1 - x) dans gameTab ainsi que le tuple de ces coordonnées 
+        #On définit count égal à 0
+        #pour i allant de 0 à length - 1 :
+            #si la valeur d'index 0 à l'index i de firstDiagonal est égale à player :
+                #alors
+                #on ajoute 1 à count
+            #si count est égal à 2 :
+                #alors
+                #pour z allant de 0 à length - 1 :
+                    #si la valeur d'index 0 à l'index z de firstDiagonal est égale au caractère "*" :
+                        #alors
+                        #On renvoie la valeur d'index 1 à l'index z de firstDiagonal
+        #On remet count à 0
+        #pour j allant de 0 à length - 1 :
+            #si la valeur d'index 0 à l'index j de secondDiagonal est égale à player :
+                #alors
+                #on ajoute 1 à count
+            #si count est égal à 2 :
+                #alors
+                #pour z allant de 0 à length - 1 :
+                    #si la valeur d'index 0 à l'index z de secondDiagonal est égale au caractère "*" :
+                        #alors
+                        #On renvoie la valeur d'index 1 à l'index z de secondDiagonal
+        #On renvoie du vide (None)
+
+    #On définit une méthode botTurn qui ne prend pas de paramètres
+        #On définit coordsPlayed égal à l'attribut takenCoords de la partie
+        #On définit temp = None
+        #On ajoute à la fin de la liste PlayerCoords la valeur dans coordsPlayed de coordonnée (-1)
+        #Tant que turnOne est vrai :
+            #alors
+            #pour i allant de 0 à coordsPlayed - 1 :
+                #si la valeur d'index i dans coordsPlayed n'est pas dans AICoords or l'index i dans coordsPlayed n'est pas dans playerCoords:
+                    #alors
+                    #On ajoute à la fin de PlayerCoords la valeur coordsPlayed d'index i
+                    #On redéfinit temp égal à la valeur d'index i dans coordsPlayed
+                #si temp est égal aux valeurs de coordonnées (0,0) ou aux valeurs de coordonnées (0,2) ou aux valeurs de coordonnées (2,0) ou aux valeurs de coordonnées (2,2):
+                    #alors
+                    #On ajoute à la fin de AICoords la valeur de coordonnée (1,1)
+                    #On redéfinit l'attribut turnOne à False 
+                    #On retourne la dernière valeur d'AICoords
+                #sinon si temp d'index 0 est égal à 0 :
+                    #alors
+                    #On ajoute à la fin de Aicoords les valeurs du premier index de temp auquel est ajouté 2, et le deuxième index de temp, le tout sous forme de tuple
+                    #On redéfinit l'attribut turnOne à False
+                    #On retourne la dernière valeur d'AICoords
+                #sinon si temp d'index 0 est égal à 2 :
+                    #alors
+                    #On ajoute à la fin de Aicoords les valeurs du premier index de temp auquel est soustrait 2, et le deuxième index de temp, le tout sous forme de tuple
+                    #On redéfinit l'attribut turnOne à False
+                    #On retourne la dernière valeur d'AICoords
+                #sinon si temp d'index 1 est égal à 0 :
+                    #alors
+                    #On ajoute à la fin de Aicoords les valeurs du premier index de temp, et le deuxième index de temp auquel est ajouté 2, le tout sous forme de tuple
+                    #On redéfinit l'attribut turnOne à False
+                    #On retourne la dernière valeur d'AICoords
+                #sinon si temp d'index 1 est égal à 2 :
+                    #alors
+                    #On ajoute à la fin de Aicoords les valeurs du premier index de temp, et le deuxième index de temp auquel est soustrait 2, le tout sous forme de tuple
+                    #On redéfinit l'attribut turnOne à False
+                    #On retourne la dernière valeur d'AICoords
+                #sinon si temp égal au couple de coordonnées (1,1) :
+                    #alors
+                    #On définit x une variable égale à la méthode randrange (issue de random) qui renverra soit 0 soit 2 
+                    #On définit y une variable égale à la méthode randrange (issue de random) qui renverra soit 0 soit 2
+                    #On ajoute à la fin de AICoords le tuple de valeurs x et y
+                    #On redéfinit l'attribut turnOne égal à False
+                    #On renvoie la dernière valeur de AICoords
+        #on redéfinit temp comme étant un tableau vide
+        #on définit tempATK un tableau vide
+        #si la méthode rowCheck avec en paramètre le caractère "X" ne renvoie pas du vide (None) et que son résultat n'est pas dans temp :            
+            #alors
+            #on ajoute à la fin de temp le résultat de la méthode rowCheck avec en paramètre le caractère "X"
+        #si la méthode colCheck avec en paramètre le caractère "X" ne renvoie pas du vide (None) et que son résultat n'est pas dans temp :            
+            #alors
+            #on ajoute à la fin de temp le résultat de la méthode colCheck avec en paramètre le caractère "X"
+        #si la méthode diagonalCheck avec en paramètre le caractère "X" ne renvoie pas du vide (None) et que son résultat n'est pas dans temp :            
+            #alors
+            #on ajoute à la fin de temp le résultat de la méthode diagonalCheck avec en paramètre le caractère "X"
+        
+        #si la méthode rowCheck avec en paramètre le caractère "O" ne renvoie pas du vide (None) et que son résultat n'est pas dans temp :            
+            #alors
+            #on ajoute à la fin de temp le résultat de la méthode rowCheck avec en paramètre le caractère "O"
+        #si la méthode colCheck avec en paramètre le caractère "O" ne renvoie pas du vide (None) et que son résultat n'est pas dans temp :            
+            #alors
+            #on ajoute à la fin de temp le résultat de la méthode colCheck avec en paramètre le caractère "O"
+        #si la méthode diagonalCheck avec en paramètre le caractère "O" ne renvoie pas du vide (None) et que son résultat n'est pas dans temp :            
+            #alors
+            #on ajoute à la fin de temp le résultat de la méthode diagonalCheck avec en paramètre le caractère "O"
+
+        #si la longeur du tableau tempATK est supérieure ou égale à 1 :
+            #alors
+            #si la longueur de tempATK est supérieure à 1 :
+                #alors
+                #on définit x un entier entre 0 et la longueur de tempATK
+                #on ajoute à l'attribut tableau AICoords la valeur d'index x de tempATK
+            #sinon si la longueur de tempATK est égale à 1 :
+                #alors 
+                # on ajoute tempATK à l'attribut tableau AICoords
+            #sinon si tempATK est égal à un tableau vide et que la méthode filledGamePlate de l'attribut game ne renvoie pas vrai :
+                #Alors
+                #on définit AICoords égal à un tuple de deux valeurs aléatoires entre 0 et 2
+                #on ajoute à la fin de l'attribut tableau AICoords la valeur d'AICoords
+        #sinon :
+            #alors
+            #si la longueur de temp est supérieure à 1 :
+                #alors
+                #on définit x un entier entre 0 et la longueur de temp
+                #on ajoute à l'attribut tableau AICoords la valeur d'index x de temp
+            #sinon si la longueur de temp est égale à 1 :
+                #alors 
+                # on ajoute temp à l'attribut tableau AICoords
+            #sinon si temp est égal à un tableau vide et que la méthode filledGamePlate de l'attribut game ne renvoie pas vrai :
+                #Alors
+                #on définit AICoords égal à un tuple de deux valeurs aléatoires entre 0 et 2
+                #on ajoute à la fin de l'attribut tableau AICoords la valeur d'AICoords
+
+        #On renvoie la valeur du dernier index de l'attribut tableau AICoords
+
+#on définit une variable game égale à un objet TicTacToe sans paramètre (une partie de joueur contre bot)
+#on applique la méthode ticTacToeStart à game (pour initialiser le tableau de jeu)
+#on applique la méthode ticTacToeGame à game (pour démarrer la partie)
 
 #FIN
