@@ -7,3 +7,6 @@ Le contenu à rendre pour le projet d'algorithmie se trouve ici
     - Morpion.py -> programme Python du jeu du Morpion (fonctionnel)
     - algoFinal-Morpion.txt -> pseudo-code Morpion
     
+- Semaine 3 :
+    - MorpionAIExtreme.py -> programme Python du Morpion avec implémentation de l'IA imbattable
+    - algoFinal-MorpionAIExtreme.txt : -> pseudo-code du Morpion avec implémentation de l'IA imbattable
